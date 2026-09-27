@@ -1,5 +1,30 @@
 # Piano Ball
 
+## Why this exists
+
+Dogs get bored, especially when they're home alone for hours. A bored dog chews furniture,
+barks, or just lies around. An ordinary ball only holds its interest for a while, because it
+does nothing back.
+
+Piano Ball **responds**. Every roll, throw and bite makes a sound, so the toy rewards the dog
+for playing with it:
+
+- **Keeps dogs engaged and active.** A toy that reacts gives the dog a reason to keep nudging,
+  chasing and chewing it. That means more exercise and more mental stimulation than a silent ball.
+- **Gives chewing somewhere good to go.** Biting the ball plays the piano, so the dog gets
+  something back for chewing the toy instead of the sofa or shoes.
+- **Lets owners hear the dog playing.** From another room, or live in the browser while
+  you're away, you can hear and see when the dog is playing, how hard and for how long.
+  "Tin tin" means it's rolling the ball, piano means it's chewing.
+- **Quiet when nobody is playing.** It stays silent while the ball rests, so it only makes
+  noise during play and not all day. It also sleeps to save its battery.
+- **No app to install.** Open a web page on any phone or laptop and it plays.
+
+It's for pet owners who want a more engaging toy, dogs that are left alone during the day, and
+anyone who wants to hear what their dog gets up to while they're out.
+
+## What it is
+
 A dog ball that makes music. An ESP32-C6 and an MPU6050 sealed in the ball stream motion
 over Wi-Fi. A plain HTML/CSS/JS page works out what the dog is doing and plays along with the
 Web Audio API.
