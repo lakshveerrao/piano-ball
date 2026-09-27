@@ -23,6 +23,53 @@ for playing with it:
 It's for pet owners who want a more engaging toy, dogs that are left alone during the day, and
 anyone who wants to hear what their dog gets up to while they're out.
 
+## Future aspects
+
+The ball already measures every roll, throw and bite 250 times a second, which opens up much
+more than music. Planned and possible directions:
+
+### Health and wellbeing
+
+- **Daily activity tracking.** Minutes of play per day, split into rolling, fetching and
+  chewing, with intensity and trends over weeks. It would work like a fitness tracker for the
+  dog, with no collar to wear.
+- **Exercise goals and weight management.** Set a daily play target (for example for an
+  overweight or high-energy breed) and see progress. The music can encourage more play when the
+  dog is below its goal.
+- **Early warning of changes.** A sudden drop in play, or play that becomes slower or shorter,
+  can be an early sign of illness, pain, joint problems or low mood. The app could flag unusual
+  changes so the owner knows to check with a vet.
+- **Chewing and dental insight.** Bite strength and chewing patterns over time. A dog that
+  suddenly bites much more softly, or avoids chewing, may have tooth or mouth discomfort.
+- **Stress and separation anxiety.** Bursts of intense chewing while the owner is out can point
+  to anxiety. Owners could see when it happens and how often, and whether training or routine
+  changes help.
+- **Ageing and recovery.** Follow an older dog's mobility, or a dog's return to normal activity
+  after surgery or injury, with real numbers instead of guesses.
+- **Vet reports.** Export a weekly or monthly activity summary to share at check-ups.
+
+> Piano Ball is not a medical device. These features would highlight changes in behaviour so
+> owners notice them earlier; they don't diagnose anything. Always ask a vet about health
+> concerns.
+
+### Smarter play
+
+- **Music that adapts to the dog.** Learn which sounds and scales get the most play from each
+  dog and use more of them.
+- **Games and training.** Fetch counters, "find the ball" sounds, and play sessions that reward
+  commands.
+- **Treat dispenser link.** Reward a good play session with a treat from a connected feeder.
+- **Multiple dogs.** Tell balls apart (ball 1, ball 2…) and compare dogs in one household.
+
+### Product
+
+- **Cloud dashboard and alerts.** History, charts and phone notifications ("Max has been playing
+  for 20 minutes"), reachable from anywhere, not only on home Wi-Fi.
+- **Tougher, pet-safe build.** A food-safe, chew-proof shell, waterproofing, and wireless charging
+  so the ball can stay sealed.
+- **Longer battery life.** Smarter sleep scheduling and a Bluetooth low-energy mode for short
+  sessions near the owner's phone.
+
 ## What it is
 
 A dog ball that makes music. An ESP32-C6 and an MPU6050 sealed in the ball stream motion
