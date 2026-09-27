@@ -1,5 +1,7 @@
 # Piano Ball
 
+**Presentation deck:** [View the web deck](https://aryashjain.github.io/petplay/presentation/index.html#1)
+
 ## Why this exists
 
 Dogs get bored, especially when they're home alone for hours. A bored dog chews furniture,
