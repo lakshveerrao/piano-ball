@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Piano Ball</title>
+<meta name="description" content="A dog ball that plays the piano: live motion from an ESP32-C6 turned into music with the Web Audio API.">
+<meta name="theme-color" content="#16131c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23f28c38'/%3E%3Cpath d='M4 13c8 4 16 4 24 0M4 19c8-4 16-4 24 0' stroke='%2316131c' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" class="ball"/><path d="M4 13c8 4 16 4 24 0M4 19c8-4 16-4 24 0" class="seam"/></svg>
+    <span>Piano Ball</span>
+  </div>
+  <div class="conn" id="conn" data-state="idle" role="status" aria-live="polite">
+    <span class="dot"></span><span id="connText">Not connected</span>
+  </div>
+  <div class="batt" id="batt" hidden title="Ball battery">
+    <svg viewBox="0 0 24 12" aria-hidden="true"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" class="shell"/><rect x="21" y="3.5" width="2.5" height="5" rx="1" class="tip"/><rect x="2" y="2" width="17" height="8" rx="1.5" class="fill" id="battFill"/></svg>
+    <span id="battText">–</span>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="stage" aria-label="Motion visualiser">
+    <canvas id="viz"></canvas>
+    <button id="startBtn" class="start" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      Start the music
+    </button>
+    <p class="hint" id="hint"></p>
+  </section>
+
+  <section class="stats" aria-label="Live readings">
+    <div class="stat mode"><span class="k">Ball is</span><span class="v" id="sMode">Resting</span></div>
+    <div class="stat"><span class="k">Spin</span><span class="v" id="sSpin">0</span><span class="u">rpm</span></div>
+    <div class="stat"><span class="k">Last hit</span><span class="v" id="sHit">–</span><span class="u">g</span></div>
+    <div class="stat"><span class="k">Airtime</span><span class="v" id="sAir">–</span><span class="u">ms</span></div>
+    <div class="stat"><span class="k">Stream</span><span class="v" id="sRate">0</span><span class="u">Hz</span></div>
+    <div class="stat"><span class="k">Latency</span><span class="v" id="sRtt">–</span><span class="u">ms</span></div>
+    <div class="stat"><span class="k">Lost</span><span class="v" id="sLost">0</span><span class="u">samples</span></div>
+  </section>
+
+  <aside class="panel">
+    <section class="group">
+      <h2>Source</h2>
+      <div class="seg" role="tablist">
+        <button type="button" role="tab" data-mode="ball" id="tabBall">Ball</button>
+        <button type="button" role="tab" data-mode="demo" id="tabDemo">Demo ball</button>
+      </div>
+      <div class="pane" id="paneBall">
+        <label class="field">
+          <span>Ball address</span>
+          <div class="row">
+            <input id="url" type="text" spellcheck="false" autocomplete="off" placeholder="ws://pianoball.local/ws">
+            <button type="button" id="connectBtn" class="btn primary">Connect</button>
+          </div>
+        </label>
+        <p class="note">On home Wi-Fi: <code>pianoball.local</code>. In setup mode join <code>PianoBall-XXXX</code> and use <code>192.168.4.1</code>.</p>
+      </div>
+      <div class="pane" id="paneDemo" hidden>
+        <p class="note">Drag the ball to roll it (tin tin tin), tap it to bounce, bite it for piano. Or let the virtual dog play.</p>
+        <div class="row wrap">
+          <button type="button" class="btn" id="demoBounce">Bounce <kbd>Space</kbd></button>
+          <button type="button" class="btn" id="demoThrow">Throw <kbd>T</kbd></button>
+          <button type="button" class="btn" id="demoBite">Bite <kbd>B</kbd></button>
+          <label class="toggle"><input type="checkbox" id="demoAuto"><span>Play fetch</span></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Music</h2>
+      <div class="grid2">
+        <label class="field"><span>Scale</span><select id="scale"></select></label>
+        <label class="field"><span>Key</span><select id="key"></select></label>
+      </div>
+      <label class="field slider"><span>Tempo <output id="tempoOut">92</output> BPM</span><input id="tempo" type="range" min="50" max="150" step="1" value="92"></label>
+      <label class="field slider"><span>Volume <output id="volumeOut">70</output>%</span><input id="volume" type="range" min="0" max="100" step="1" value="70"></label>
+      <label class="field slider"><span>Reverb <output id="reverbOut">30</output>%</span><input id="reverb" type="range" min="0" max="100" step="1" value="30"></label>
+      <label class="field slider"><span>Sensitivity <output id="sensOut">1.0</output>×</span><input id="sens" type="range" min="0.4" max="2.5" step="0.1" value="1"></label>
+      <button type="button" class="btn" id="pauseBtn" disabled>Pause music</button>
+    </section>
+
+    <details class="group" id="ballSettings">
+      <summary><h2>Ball settings</h2></summary>
+      <label class="field slider"><span>Impact threshold <output id="thrOut">2.5</output> g</span><input id="thr" type="range" min="1" max="8" step="0.1" value="2.5"></label>
+      <label class="field"><span>Sleep when still for</span>
+        <select id="sleepAfter">
+          <option value="30">30 seconds</option><option value="60" selected>1 minute</option>
+          <option value="120">2 minutes</option><option value="300">5 minutes</option><option value="0">Never</option>
+        </select>
+      </label>
+      <button type="button" class="btn" id="sleepNow">Put ball to sleep</button>
+      <dl class="info" id="devInfo"></dl>
+      <form class="wifi" id="wifiForm" autocomplete="off">
+        <h3>Ball Wi-Fi</h3>
+        <label class="field"><span>Network name</span><input id="wifiSsid" maxlength="32" required></label>
+        <label class="field"><span>Password</span><input id="wifiPass" type="password" maxlength="63"></label>
+        <button type="submit" class="btn">Save and reboot ball</button>
+        <p class="note" id="wifiMsg"></p>
+      </form>
+    </details>
+  </aside>
+</main>
+
+<script src="js/protocol.js"></script>
+<script src="js/link.js"></script>
+<script src="js/motion.js"></script>
+<script src="js/piano.js"></script>
+<script src="js/composer.js"></script>
+<script src="js/visualizer.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

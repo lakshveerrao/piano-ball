@@ -1,0 +1,12 @@
+.pio/
+firmware/sdkconfig*
+!firmware/sdkconfig.defaults
+firmware/main/wifi_secrets.h
+firmware/managed_components/
+firmware/dependencies.lock
+firmware/.build.log
+node_modules/
+firmware/.pio-wsl/
+firmware/.flash.log
+firmware/.verbose.log
+firmware/.build.log.err

@@ -1,0 +1,23 @@
+# Piano Ball (ESP32-C6). sdkconfig itself is generated; edit this file.
+CONFIG_IDF_TARGET="esp32c6"
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+
+# Console on the native USB Serial/JTAG port
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+CONFIG_LOG_DEFAULT_LEVEL_INFO=y
+
+# 1 kHz tick: the sensor task runs every 8 ms
+CONFIG_FREERTOS_HZ=1000
+
+# WebSocket support in esp_http_server
+CONFIG_HTTPD_WS_SUPPORT=y
+CONFIG_HTTPD_MAX_URI_LEN=128
+
+# Wi-Fi power save allowed (we switch modes at runtime)
+CONFIG_ESP_WIFI_STA_DISCONNECTED_PM_ENABLE=y
+
+CONFIG_ESP_BROWNOUT_DET=y
+CONFIG_COMPILER_OPTIMIZATION_PERF=y
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096
